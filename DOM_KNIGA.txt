@@ -1,0 +1,37 @@
+DROP DATABASE IF EXISTS `dom_kniga`;
+
+CREATE DATABASE `dom_kniga`;
+
+CREATE TABLE `dom_kniga`.`apartamenti` (
+	`id` TINYINT NOT NULL  AUTO_INCREMENT ,
+	`sustoqnie` VARCHAR( 255 ) NOT NULL ,
+	`opisanie` VARCHAR( 255 ) NOT NULL ,
+	`nomer_ap` TINYINT NOT NULL ,
+	`nomer_bl` TINYINT NOT NULL ,
+	PRIMARY KEY ( `id` )
+) ENGINE = InnoDB;
+
+CREATE TABLE `dom_kniga`.`jivushti` (
+	`id` TINYINT NOT NULL  AUTO_INCREMENT,
+	`name` VARCHAR( 255 ) NOT NULL ,
+	`apartament_id` TINYINT NOT NULL ,
+	`is_owner` VARCHAR( 255 ) NOT NULL,
+	PRIMARY KEY ( `id` ),
+FOREIGN KEY ( `apartament_id` )
+		REFERENCES `dom_kniga`.`apartamenti`( `id` )
+		ON DELETE CASCADE
+) ENGINE = InnoDB;
+
+
+INSERT INTO `dom_kniga`.`apartamenti` (`id` ,`sustoqnie` ,`opisanie` ,`nomer_ap` ,`nomer_bl`)
+VALUES 	( NULL , 'dobro', 'garsoniera-24^2', 24 , 14), 
+	( NULL , 'lo6o', 'dvustaen-28^2', 26 , 9),
+	( NULL , 'lo6o', 'boksoniera-14^2', 13 , 15),
+	( NULL , 'dobro', 'garsoniera-24^2', 5 , 18), 
+
+
+INSERT INTO `dom_kniga`.`jivushti` (`id`, `name`, `apartament_id`,`is_owner`)
+VALUES 	( NULL , 'Ivanka', '2' , 'ne'), 
+	( NULL , 'Go6o','2', 'da'),
+	( NULL , 'Petar','1', 'ne'),
+	( NULL , 'Venci','3', 'ne');

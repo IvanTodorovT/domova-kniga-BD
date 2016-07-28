@@ -1,0 +1,176 @@
+package werehouse;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.TextArea;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.ArrayList;
+
+import javax.swing.JRadioButton;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.JScrollBar;
+
+public class blq extends JFrame {
+
+	private JPanel contentPane;
+
+	private DataInputStream din;
+	private DataOutputStream dout;
+	private Socket connection;
+	static int port = 5555;
+	static String host = "localhost";
+	private final Action action = new SwingAction();
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					blq frame = new blq();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public blq() {
+		try {
+			connection = new Socket(host, port);
+			din = new DataInputStream(connection.getInputStream());
+			dout = new DataOutputStream(connection.getOutputStream());
+
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			setBounds(100, 100, 467, 428);
+			contentPane = new JPanel();
+			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+			setContentPane(contentPane);
+			contentPane.setLayout(null);
+
+			JTextPane ResultText = new JTextPane();
+			ResultText.setBounds(29, 98, 381, 261);
+			contentPane.add(ResultText);
+
+			JButton spravka1 = new JButton(
+					"\u0421\u043F\u0440\u0430\u0432\u043A\u04301");
+			spravka1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					try {
+						dout.writeUTF("spravka_1");
+						dout.flush();
+
+						String rs = din.readUTF();
+						ResultText.setText(rs);
+					} catch (IOException e) {
+						ResultText.setText(e.getMessage());
+					}
+
+				}
+			});
+			spravka1.setBounds(19, 11, 113, 23);
+			contentPane.add(spravka1);
+
+			JButton spravka2 = new JButton(
+					"\u0421\u043F\u0440\u0430\u0432\u043A\u04302");
+			spravka2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+
+					try {
+						dout.writeUTF("spravka_2");
+						dout.flush();
+
+						String rs = din.readUTF();
+						ResultText.setText(rs);
+					} catch (IOException e2) {
+						ResultText.setText(e2.getMessage());
+					}
+
+				}
+			});
+			spravka2.setBounds(311, 11, 113, 23);
+			contentPane.add(spravka2);
+
+			JButton spravka3 = new JButton(
+					"\u0421\u043F\u0440\u0430\u0432\u043A\u04303");
+			spravka3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+
+					try {
+						dout.writeUTF("spravka_3");
+						dout.flush();
+
+						String rs = din.readUTF();
+						ResultText.setText(rs);
+					} catch (IOException e3) {
+						ResultText.setText(e3.getMessage());
+					}
+
+				}
+			});
+			spravka3.setBounds(19, 55, 113, 23);
+			contentPane.add(spravka3);
+
+			JButton spravka4 = new JButton(
+					"\u0421\u043F\u0440\u0430\u0432\u043A\u04304");
+			spravka4.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+
+					try {
+						dout.writeUTF("spravka_4");
+						dout.flush();
+
+						String rs = din.readUTF();
+						ResultText.setText(rs);
+					} catch (IOException e4) {
+						ResultText.setText(e4.getMessage());
+					}
+
+				}
+			});
+			spravka4.setBounds(311, 55, 113, 23);
+			contentPane.add(spravka4);
+
+			JLabel label = new JLabel(
+					"\u0414\u043E\u043C\u043E\u0432\u0430 \u041A\u043D\u0438\u0433\u0430 :)");
+			label.setBounds(168, 15, 122, 63);
+			contentPane.add(label);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+}

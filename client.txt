@@ -1,0 +1,150 @@
+package werehouse;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Client_Thread implements Runnable {
+	DataInputStream din;
+	static DataOutputStream dout;
+	Scanner input;
+	PreparedStatement st;
+	ResultSet rs;
+	Connection con;
+
+	public Client_Thread(Socket connection, Connection con) throws Exception {
+		super();
+		this.con = con;
+		din = new DataInputStream(connection.getInputStream());
+		dout = new DataOutputStream(connection.getOutputStream());
+		input = new Scanner(System.in);
+	}
+
+	public synchronized void run() {
+		while (true) {
+			try {
+				String action = din.readUTF();
+				switch (action) {
+				case "spravka_1": {
+					String spravka = spravka1();
+					dout.writeUTF(spravka);
+					dout.flush();
+					break;
+				}
+
+				case "spravka_2": {
+					String spravka = spravka2();
+					dout.writeUTF(spravka);
+					dout.flush();
+					break;
+				}
+				case "spravka_3": {
+					String spravka = spravka3();
+					dout.writeUTF(spravka);
+					dout.flush();
+					break;
+				}
+				case "spravka_4": {
+					String spravka = spravka4();
+					dout.writeUTF(spravka);
+					dout.flush();
+					break;
+				}
+				}
+
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+
+	public String spravka1() throws Exception {
+		String response = "Справка 1 \r\n";
+		st = con.prepareStatement("call spravka1;");
+		rs = st.executeQuery();
+		while (rs.next()) {
+
+			Long id = rs.getLong("id");
+			String opisanie = rs.getString("opisanie");
+			String sustoqnie = rs.getString("sustoqnie");
+			int nomer_ap = rs.getInt("nomer_ap");
+			int nomer_bl = rs.getInt("nomer_bl");
+
+			response += " " + id + "|   bl." + nomer_bl + " ap." + nomer_ap
+					+ " e v " + sustoqnie + " sustoqnie (" + opisanie + ")\r\n";
+
+		}
+		return response;
+
+	}
+
+	public String spravka2() throws Exception {
+		String response = "Справка 2 \r\n";
+		st = con.prepareStatement("select* from jivushti;");
+		rs = st.executeQuery();
+		while (rs.next()) {
+
+			Long id = rs.getLong("id");
+			String name = rs.getString("name");
+			Long apartament_id = rs.getLong("apartament_id");
+			String is_owner = rs.getString("is_owner");
+
+			response += " " + id + "|   Sobstvenik li e: " + is_owner
+					+ "; Jivee v ap: " + apartament_id + " ime: " + name
+					+ "\r\n";
+
+		}
+		return response;
+
+	}
+
+	public String spravka3() throws Exception {
+		String response = "Справка 3 \r\n";
+		st = con.prepareStatement("call spravka3;");
+		rs = st.executeQuery();
+		while (rs.next()) {
+
+			// Long id = rs.getLong("id");
+			String name = rs.getString("name");
+			int nomer_ap = rs.getInt("nomer_ap");
+			// Long apartament_id = rs.getLong("apartament_id");
+			// String is_owner = rs.getString("is_owner");
+
+			// response += " " + id + "|   Sobstvenik li e: " + is_owner
+			// + "; Jivee v ap: " + apartament_id + " ime: " + name + "\r\n";
+			response += " " + name + "  |  Jivee v apartament: " + nomer_ap
+					+ "\r\n";
+
+		}
+		return response;
+
+	}
+
+	public String spravka4() throws Exception {
+		String response = "Справка 4 \r\n";
+		st = con.prepareStatement("select* from apartamenti where id=1;");
+		rs = st.executeQuery();
+		while (rs.next()) {
+
+			Long id = rs.getLong("id");
+			String opisanie = rs.getString("opisanie");
+			String sustoqnie = rs.getString("sustoqnie");
+			int nomer_ap = rs.getInt("nomer_ap");
+			int nomer_bl = rs.getInt("nomer_bl");
+
+			response += " " + id + "|   bl." + nomer_bl + " ap." + nomer_ap
+					+ " e v " + sustoqnie + " sustoqnie (" + opisanie + ")\r\n";
+
+		}
+		return response;
+
+	}
+
+}
